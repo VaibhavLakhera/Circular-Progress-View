@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">Circular Progress View</string>
+
+    <array name="progress_text_types">
+        <item>Progress</item>
+        <item>Percent</item>
+    </array>
+
+    <integer-array name="animate_durations_int">
+        <item>200</item>
+        <item>300</item>
+        <item>500</item>
+        <item>600</item>
+        <item>800</item>
+        <item>1000</item>
+        <item>2000</item>
+        <item>3000</item>
+    </integer-array>
+
+    <array name="animate_durations_string">
+        <item>200 ms</item>
+        <item>300 ms</item>
+        <item>500 ms</item>
+        <item>600 ms</item>
+        <item>800 ms</item>
+        <item>1000 ms</item>
+        <item>2000 ms</item>
+        <item>3000 ms</item>
+    </array>
+</resources>

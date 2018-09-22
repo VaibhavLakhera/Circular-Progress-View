@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="CircularProgressView">
+        <attr name="total" format="integer" />
+        <attr name="totalColor" format="color" />
+        <attr name="totalWidth" format="dimension" />
+
+        <attr name="progress" format="integer" />
+        <attr name="progressColor" format="color" />
+        <attr name="progressWidth" format="dimension" />
+        <attr name="progressRoundCap" format="boolean" />
+
+        <attr name="progressTextEnabled" format="boolean" />
+        <attr name="progressTextType" format="enum">
+            <enum name="progress" value="0" />
+            <enum name="percent" value="1" />
+        </attr>
+        <attr name="progressTextSize" format="dimension" />
+        <attr name="progressTextColor" format="color" />
+
+        <attr name="fillColor" format="color" />
+
+        <attr name="startAngle" format="float" />
+
+        <attr name="animate" format="boolean" />
+        <attr name="animateDuration" format="integer" />
+    </declare-styleable>
+</resources>

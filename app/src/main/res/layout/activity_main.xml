@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <com.vaibhavlakhera.circularprogressview.CircularProgressView
+        android:id="@+id/progressView"
+        android:layout_width="164dp"
+        android:layout_height="164dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="24dp"
+        app:animate="true"
+        app:animateDuration="600"
+        app:fillColor="@color/colorPrimary"
+        app:progress="10"
+        app:progressColor="#FFF"
+        app:progressRoundCap="true"
+        app:progressTextColor="#FFF"
+        app:progressTextEnabled="true"
+        app:progressTextSize="32sp"
+        app:progressTextType="progress"
+        app:progressWidth="12dp"
+        app:startAngle="270"
+        app:total="100"
+        app:totalColor="@color/colorPrimaryDark"
+        app:totalWidth="20dp" />
+
+    <android.support.design.button.MaterialButton
+        android:id="@+id/btnUpdate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/progressView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="24dp"
+        android:text="UPDATE" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/btnUpdate">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp">
+
+            <TextView
+                android:id="@+id/tvLabelTotal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Total" />
+
+            <TextView
+                android:id="@+id/tvTotal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:text="100" />
+
+            <SeekBar
+                android:id="@+id/seekBarTotal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tvLabelTotal"
+                android:max="1000"
+                android:min="10"
+                android:progress="100" />
+
+            <android.support.design.button.MaterialButton
+                android:id="@+id/btnTotalColor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/seekBarTotal"
+                android:layout_marginTop="8dp"
+                android:text="Total Color" />
+
+            <TextView
+                android:id="@+id/tvLabelTotalWidth"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/btnTotalColor"
+                android:layout_marginTop="8dp"
+                android:text="Total Width" />
+
+            <TextView
+                android:id="@+id/tvTotalWidth"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_below="@id/btnTotalColor"
+                android:layout_marginTop="8dp"
+                android:text="20 DP" />
+
+            <SeekBar
+                android:id="@+id/seekBarTotalWidth"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tvLabelTotalWidth"
+                android:max="36"
+                android:min="2"
+                android:progress="20" />
+
+            <TextView
+                android:id="@+id/tvLabelProgress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/seekBarTotalWidth"
+                android:layout_marginTop="8dp"
+                android:text="Progress" />
+
+            <TextView
+                android:id="@+id/tvProgress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_below="@id/seekBarTotalWidth"
+                android:layout_marginTop="8dp"
+                android:text="10" />
+
+            <SeekBar
+                android:id="@+id/seekBarProgress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tvLabelProgress"
+                android:max="1000"
+                android:min="10"
+                android:progress="10" />
+
+            <android.support.design.button.MaterialButton
+                android:id="@+id/btnProgressColor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/seekBarProgress"
+                android:layout_marginTop="8dp"
+                android:text="Progress Color" />
+
+            <TextView
+                android:id="@+id/tvLabelProgressWidth"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/btnProgressColor"
+                android:layout_marginTop="8dp"
+                android:text="Progress Width" />
+
+            <TextView
+                android:id="@+id/tvProgressWidth"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_below="@id/btnProgressColor"
+                android:layout_marginTop="8dp"
+                android:text="12 DP" />
+
+            <SeekBar
+                android:id="@+id/seekBarProgressWidth"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tvLabelProgressWidth"
+                android:max="36"
+                android:min="2"
+                android:progress="12" />
+
+            <CheckBox
+                android:id="@+id/cbProgressRoundCap"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/seekBarProgressWidth"
+                android:layout_marginTop="4dp"
+                android:checked="true"
+                android:text="Progress Round Cap" />
+
+            <CheckBox
+                android:id="@+id/cbProgressTextEnabled"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/cbProgressRoundCap"
+                android:layout_marginTop="4dp"
+                android:checked="true"
+                android:text="Progress Text Enabled" />
+
+            <TextView
+                android:id="@+id/tvLabelProgressTextType"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/cbProgressTextEnabled"
+                android:layout_marginTop="6dp"
+                android:text="Progress Text Type" />
+
+            <Spinner
+                android:id="@+id/spinnerProgressTextType"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/cbProgressTextEnabled"
+                android:layout_marginTop="4dp"
+                android:layout_toEndOf="@id/tvLabelProgressTextType"
+                android:layout_toRightOf="@id/tvLabelProgressTextType" />
+
+            <TextView
+                android:id="@+id/tvLabelProgressTextSize"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/spinnerProgressTextType"
+                android:layout_marginTop="8dp"
+                android:text="Progress Text Size" />
+
+            <TextView
+                android:id="@+id/tvProgressTextSize"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_below="@id/spinnerProgressTextType"
+                android:layout_marginTop="8dp"
+                android:text="32 SP" />
+
+            <SeekBar
+                android:id="@+id/seekBarProgressTextSize"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tvLabelProgressTextSize"
+                android:max="48"
+                android:min="6"
+                android:progress="32" />
+
+            <android.support.design.button.MaterialButton
+                android:id="@+id/btnProgressTextColor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/seekBarProgressTextSize"
+                android:layout_marginTop="8dp"
+                android:text="Progress Text Color" />
+
+            <android.support.design.button.MaterialButton
+                android:id="@+id/btnFillColor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/btnProgressTextColor"
+                android:layout_marginTop="8dp"
+                android:text="Fill Color" />
+
+            <TextView
+                android:id="@+id/tvLabelStartAngle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/btnFillColor"
+                android:layout_marginTop="8dp"
+                android:text="Start Angle" />
+
+            <TextView
+                android:id="@+id/tvStartAngle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_below="@id/btnFillColor"
+                android:layout_marginTop="8dp"
+                android:text="270" />
+
+            <SeekBar
+                android:id="@+id/seekBarStartAngle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tvLabelStartAngle"
+                android:max="360"
+                android:min="0"
+                android:progress="270" />
+
+            <CheckBox
+                android:id="@+id/cbAnimate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/seekBarStartAngle"
+                android:layout_marginTop="4dp"
+                android:checked="true"
+                android:text="Animate" />
+
+            <TextView
+                android:id="@+id/tvLabelAnimateDuration"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/cbAnimate"
+                android:layout_marginTop="6dp"
+                android:text="Animate Duration" />
+
+            <Spinner
+                android:id="@+id/spinnerAnimateDuration"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/cbAnimate"
+                android:layout_marginTop="4dp"
+                android:layout_toEndOf="@id/tvLabelAnimateDuration"
+                android:layout_toRightOf="@id/tvLabelAnimateDuration" />
+        </RelativeLayout>
+    </ScrollView>
+</RelativeLayout>
