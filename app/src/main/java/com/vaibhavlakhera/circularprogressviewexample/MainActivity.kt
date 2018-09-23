@@ -11,6 +11,13 @@ import java.util.*
 
 class MainActivity : AppCompatActivity() {
     private val colors by lazy { resources.getIntArray(R.array.colors) }
+    private val progressInterpolator by lazy {
+        arrayOf(
+                android.R.interpolator.linear,
+                android.R.interpolator.bounce,
+                android.R.interpolator.accelerate_decelerate,
+                android.R.interpolator.anticipate_overshoot)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -111,6 +118,24 @@ class MainActivity : AppCompatActivity() {
 
         btnProgressTextColor.setOnClickListener {
             progressView.setProgressTextColor(colors[Random().nextInt(colors.size)])
+        }
+
+        ArrayAdapter.createFromResource(
+                this,
+                R.array.progress_interpolator_text,
+                android.R.layout.simple_spinner_item
+        ).also { adapter ->
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            spinnerProgressInterpolator.adapter = adapter
+        }
+        spinnerProgressInterpolator.onItemSelectedListener = object :
+                AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+            }
+
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                progressView.setProgressInterpolator(progressInterpolator[position])
+            }
         }
 
         btnFillColor.setOnClickListener {

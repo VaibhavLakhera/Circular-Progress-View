@@ -17,6 +17,7 @@
         </attr>
         <attr name="progressTextSize" format="dimension" />
         <attr name="progressTextColor" format="color" />
+        <attr name="progressInterpolator" format="reference" />
 
         <attr name="fillColor" format="color" />
 

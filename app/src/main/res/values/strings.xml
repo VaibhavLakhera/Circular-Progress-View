@@ -6,6 +6,13 @@
         <item>Percent</item>
     </array>
 
+    <array name="progress_interpolator_text">
+        <item>Linear</item>
+        <item>Bounce</item>
+        <item>Accelerate decelerate</item>
+        <item>Anticipate overshoot</item>
+    </array>
+
     <integer-array name="animate_durations_int">
         <item>200</item>
         <item>300</item>

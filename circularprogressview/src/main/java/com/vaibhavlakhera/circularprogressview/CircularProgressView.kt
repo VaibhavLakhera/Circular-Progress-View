@@ -8,11 +8,16 @@ import android.graphics.RectF
 import android.os.Bundle
 import android.os.Parcelable
 import android.support.annotation.ColorRes
+import android.support.annotation.InterpolatorRes
 import android.support.v4.content.ContextCompat
 import android.text.TextPaint
 import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.View
+import android.view.animation.AnimationUtils
+import android.view.animation.Interpolator
+import android.view.animation.LinearInterpolator
+import java.text.NumberFormat
 
 class CircularProgressView : View {
     companion object {
@@ -20,17 +25,22 @@ class CircularProgressView : View {
         const val PROGRESS_TEXT_TYPE_PERCENT = 1
 
         private const val KEY_STATE = "KEY_STATE"
+
         private const val KEY_TOTAL = "KEY_TOTAL"
         private const val KEY_TOTAL_COLOR = "KEY_TOTAL_COLOR"
         private const val KEY_TOTAL_WIDTH = "KEY_TOTAL_WIDTH"
+
         private const val KEY_PROGRESS = "KEY_PROGRESS"
         private const val KEY_PROGRESS_COLOR = "KEY_PROGRESS_COLOR"
         private const val KEY_PROGRESS_WIDTH = "KEY_PROGRESS_WIDTH"
         private const val KEY_PROGRESS_ROUND_CAP = "KEY_PROGRESS_ROUND_CAP"
+        private const val KEY_PROGRESS_INTERPOLATOR_RES_ID = "KEY_PROGRESS_INTERPOLATOR_RES_ID"
+
         private const val KEY_PROGRESS_TEXT_ENABLED = "KEY_PROGRESS_TEXT_ENABLED"
         private const val KEY_PROGRESS_TEXT_TYPE = "KEY_PROGRESS_TEXT_TYPE"
         private const val KEY_PROGRESS_TEXT_SIZE = "KEY_PROGRESS_TEXT_SIZE"
         private const val KEY_PROGRESS_TEXT_COLOR = "KEY_PROGRESS_TEXT_COLOR"
+
         private const val KEY_FILL_COLOR = "KEY_FILL_COLOR"
         private const val KEY_START_ANGLE = "KEY_START_ANGLE"
         private const val KEY_ANIMATE = "KEY_ANIMATE"
@@ -41,6 +51,12 @@ class CircularProgressView : View {
     private val paintProgress = Paint(Paint.ANTI_ALIAS_FLAG)
     private val paintProgressText = TextPaint(Paint.ANTI_ALIAS_FLAG)
     private val paintFill = Paint(Paint.ANTI_ALIAS_FLAG)
+
+    private val percentFormat by lazy { NumberFormat.getPercentInstance() }
+
+    private val circleBounds = RectF()
+    private var centerX: Float = 0f
+    private var centerY: Float = 0f
 
     private var total: Int = 100
     private var totalColor: Int = 0
@@ -55,6 +71,8 @@ class CircularProgressView : View {
     private var progressTextType: Int = PROGRESS_TEXT_TYPE_PROGRESS
     private var progressTextSize: Float = 0f
     private var progressTextColor: Int = 0
+    private var progressInterpolatorResId = android.R.anim.linear_interpolator
+    private var progressInterpolator: Interpolator = LinearInterpolator()
 
     private var fillColor: Int = 0
 
@@ -85,6 +103,11 @@ class CircularProgressView : View {
             progressTextType = typedArray.getInt(R.styleable.CircularProgressView_progressTextType, PROGRESS_TEXT_TYPE_PROGRESS)
             progressTextSize = typedArray.getDimensionPixelSize(R.styleable.CircularProgressView_progressTextSize, 0).toFloat()
             progressTextColor = typedArray.getColor(R.styleable.CircularProgressView_progressTextColor, 0)
+
+            // Set default to linear interpolator
+            val interpolatorResId = typedArray.getResourceId(R.styleable.CircularProgressView_progressInterpolator, android.R.anim.linear_interpolator)
+            progressInterpolatorResId = interpolatorResId
+            progressInterpolator = AnimationUtils.loadInterpolator(context, interpolatorResId)
 
             fillColor = typedArray.getColor(R.styleable.CircularProgressView_fillColor, 0)
 
@@ -119,52 +142,61 @@ class CircularProgressView : View {
         paintFill.color = fillColor
     }
 
+    override fun onSizeChanged(width: Int, height: Int, oldw: Int, oldh: Int) {
+        updateBounds()
+        centerX = (width / 2).toFloat()
+        centerY = (height / 2).toFloat()
+    }
+
+    private fun updateBounds() {
+        /*
+        * Padding will always be the max value out of progress width and total width
+        * so that drawing will begin at the edge of the view.
+        * */
+        val padding = Math.max(progressWidth, totalWidth) / 2
+        circleBounds.apply {
+            left = padding
+            top = padding
+            right = width - padding
+            bottom = height - padding
+        }
+    }
+
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
+        // Draw fill color circle if color exists
         if (fillColor != 0) {
-            val centerX = (width / 2).toFloat()
-            val centerY = (height / 2).toFloat()
+            // Calculate padding for fill color to make sure it is always within the total progress circle
             val padding = if (totalWidth >= progressWidth) {
                 totalWidth
             } else {
                 (progressWidth / 2) + (totalWidth / 2)
             }
-            val radius = (width / 2) - padding + 1  // Adding 1 to fill the tiny gap that is left
+            val radius = centerX - padding + 1  // Adding 1 to fill the tiny gap that is left
             canvas.drawCircle(centerX, centerY, radius, paintFill)
         }
 
-        // Draw the text if it is enabled
+        // Draw the progress text if it is enabled
         if (progressTextEnabled) {
             val progressText: String = when (progressTextType) {
                 PROGRESS_TEXT_TYPE_PROGRESS -> progress.toString()
-                PROGRESS_TEXT_TYPE_PERCENT -> String.format("%d%%", ((progress.toFloat() / total.toFloat()) * 100).toInt())
+                PROGRESS_TEXT_TYPE_PERCENT -> percentFormat.format(progress.toFloat() / total.toFloat())
                 else -> ""
             }
 
-            val xPosition = (width / 2).toFloat()
-            val yPosition = (height / 2).toFloat() - ((paintProgressText.descent() + paintProgressText.ascent()) / 2)
-            canvas.drawText(progressText, xPosition, yPosition, paintProgressText)
+            val yPosition = centerY - ((paintProgressText.descent() + paintProgressText.ascent()) / 2)
+            canvas.drawText(progressText, centerX, yPosition, paintProgressText)
         }
 
-        // Total progress is always a 360 degree circle
-        drawProgress(canvas, 360f, paintTotal)
+        // Draw total progress
+        canvas.drawOval(circleBounds, paintTotal)
 
         // Current progress is calculated in degrees from total and progress values
         if (total != 0 && progress != 0 && progress <= total) {
-            val progressAngle = if (total == progress) 360f else ((360f / total) * progress)
-            drawProgress(canvas, progressAngle, paintProgress)
+            val progressSweepAngle = if (total == progress) 360f else ((360f / total) * progress)
+            canvas.drawArc(circleBounds, startAngle, progressSweepAngle, false, paintProgress)
         }
-    }
-
-    private fun drawProgress(canvas: Canvas, sweepAngle: Float, paint: Paint) {
-        /*
-        * Padding will always be the max value out of progress and total width
-        * so that drawing will begin at the edge of the view.
-        * */
-        val padding = Math.max(progressWidth, totalWidth) / 2
-        val oval = RectF(padding, padding, width.toFloat() - padding, height.toFloat() - padding)
-        canvas.drawArc(oval, startAngle, sweepAngle, false, paint)
     }
 
     /**
@@ -208,6 +240,7 @@ class CircularProgressView : View {
     fun setTotalWidth(widthInDp: Float) {
         this.totalWidth = dpToPx(widthInDp)
         paintTotal.strokeWidth = this.totalWidth
+        updateBounds()
         invalidate()
     }
 
@@ -223,9 +256,11 @@ class CircularProgressView : View {
             progressAnimator?.cancel()
 
             val animator = ValueAnimator.ofInt(this.progress, validProgress)
+            animator.interpolator = progressInterpolator
             animator.duration = animateDuration
             animator.addUpdateListener {
-                this.progress = it.animatedValue as Int
+                // To make sure progress is valid in case of interpolator like "anticipate overshoot"
+                this.progress = getValidProgressValue(it.animatedValue as Int)
                 invalidate()
             }
             animator.start()
@@ -253,6 +288,7 @@ class CircularProgressView : View {
     fun setProgressWidth(widthInDp: Float) {
         this.progressWidth = dpToPx(widthInDp)
         paintProgress.strokeWidth = this.progressWidth
+        updateBounds()
         invalidate()
     }
 
@@ -299,6 +335,14 @@ class CircularProgressView : View {
         this.progressTextColor = ContextCompat.getColor(context, colorRes)
         paintProgressText.color = this.progressTextColor
         invalidate()
+    }
+
+    /**
+     * @param interpolatorResId Must be one from android.R.interpolator.*
+     * */
+    fun setProgressInterpolator(@InterpolatorRes interpolatorResId: Int) {
+        this.progressInterpolatorResId = interpolatorResId
+        progressInterpolator = AnimationUtils.loadInterpolator(context, interpolatorResId)
     }
 
     fun setFillColor(color: Int) {
@@ -364,6 +408,7 @@ class CircularProgressView : View {
         bundle.putInt(KEY_PROGRESS_COLOR, progressColor)
         bundle.putFloat(KEY_PROGRESS_WIDTH, progressWidth)
         bundle.putBoolean(KEY_PROGRESS_ROUND_CAP, progressRoundCap)
+        bundle.putInt(KEY_PROGRESS_INTERPOLATOR_RES_ID, progressInterpolatorResId)
 
         // Keys for progress text
         bundle.putBoolean(KEY_PROGRESS_TEXT_ENABLED, progressTextEnabled)
@@ -391,6 +436,7 @@ class CircularProgressView : View {
             progressColor = state.getInt(KEY_PROGRESS_COLOR)
             progressWidth = state.getFloat(KEY_PROGRESS_WIDTH)
             progressRoundCap = state.getBoolean(KEY_PROGRESS_ROUND_CAP)
+            progressInterpolatorResId = state.getInt(KEY_PROGRESS_INTERPOLATOR_RES_ID)
 
             progressTextEnabled = state.getBoolean(KEY_PROGRESS_TEXT_ENABLED)
             progressTextType = state.getInt(KEY_PROGRESS_TEXT_TYPE)
@@ -402,6 +448,7 @@ class CircularProgressView : View {
             animate = state.getBoolean(KEY_ANIMATE)
             animateDuration = state.getLong(KEY_ANIMATE_DURATION)
 
+            progressInterpolator = AnimationUtils.loadInterpolator(context, progressInterpolatorResId)
             setupPaint()
 
             // Restore the view's internal state

@@ -18,6 +18,7 @@
         app:fillColor="@color/colorPrimary"
         app:progress="10"
         app:progressColor="#FFF"
+        app:progressInterpolator="@android:anim/accelerate_decelerate_interpolator"
         app:progressRoundCap="true"
         app:progressTextColor="#FFF"
         app:progressTextEnabled="true"
@@ -240,11 +241,28 @@
                 android:layout_marginTop="8dp"
                 android:text="Progress Text Color" />
 
+            <TextView
+                android:id="@+id/tvLabelProgressInterpolator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/btnProgressTextColor"
+                android:layout_marginTop="6dp"
+                android:text="Progress Interpolator" />
+
+            <Spinner
+                android:id="@+id/spinnerProgressInterpolator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/btnProgressTextColor"
+                android:layout_marginTop="4dp"
+                android:layout_toEndOf="@id/tvLabelProgressInterpolator"
+                android:layout_toRightOf="@id/tvLabelProgressInterpolator" />
+
             <android.support.design.button.MaterialButton
                 android:id="@+id/btnFillColor"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/btnProgressTextColor"
+                android:layout_below="@id/spinnerProgressInterpolator"
                 android:layout_marginTop="8dp"
                 android:text="Fill Color" />
 
