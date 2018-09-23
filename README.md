@@ -6,7 +6,7 @@ A customisable circular progress view for android.
 ![MainImage](https://i.imgur.com/fmKFmeS.png)
 
 ## Highlights:
-* Depends on Kotlin(1.2.70) and Android Support(28.0.0-rc02)
+* Depends on Kotlin(1.2.70) and Android Support AppCompat(28.0.0)
 * minSdkVersion(14) and targetSdkVersion(28)
 * View state is retained on configuration change
 
@@ -24,6 +24,7 @@ A customisable circular progress view for android.
 | app:progressTextType | Enum (progress or percent) | "progress" will show the value of current progress and "percent" will show percent of current progress out of total. By default it is "progress" |
 | app:progressTextSize | Dimension | Text size of progress text |
 | app:progressTextColor | Color | Color of progress text |
+| app:progressInterpolator | Reference | Interpolator reference. Default is @android:anim/linear_interpolator |
 | app:fillColor | Color | Fill color begins from center of the view to the inner radius of the total progress |
 | app:startAngle | Float | Start angle in degrees for current progress. By default it is 270 so that it starts from the top. |
 | app:animate | Boolean | Enable or disable animation when current progress changes. Disabled by default. |
@@ -40,6 +41,7 @@ A customisable circular progress view for android.
         app:fillColor="@color/colorPrimary"
         app:progress="10"
         app:progressColor="#FFF"
+        app:progressInterpolator="@android:anim/accelerate_decelerate_interpolator"
         app:progressRoundCap="true"
         app:progressTextColor="#FFF"
         app:progressTextEnabled="true"
@@ -66,7 +68,7 @@ allprojects {
 Step 2. Add the dependency
 ```groovy
 dependencies {
-  implementation 'com.github.VaibhavLakhera:Circular-Progress-View:0.1.0'
+  implementation 'com.github.VaibhavLakhera:Circular-Progress-View:0.1.1'
 }
 ```
 
