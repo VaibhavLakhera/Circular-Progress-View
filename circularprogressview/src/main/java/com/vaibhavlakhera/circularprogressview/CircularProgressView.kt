@@ -26,11 +26,11 @@ class CircularProgressView : View {
 
         private const val KEY_STATE = "KEY_STATE"
 
-        private const val KEY_TOTAL = "KEY_TOTAL"
+        private const val KEY_TOTAL_VALUE = "KEY_TOTAL_VALUE"
         private const val KEY_TOTAL_COLOR = "KEY_TOTAL_COLOR"
         private const val KEY_TOTAL_WIDTH = "KEY_TOTAL_WIDTH"
 
-        private const val KEY_PROGRESS = "KEY_PROGRESS"
+        private const val KEY_PROGRESS_VALUE = "KEY_PROGRESS_VALUE"
         private const val KEY_PROGRESS_COLOR = "KEY_PROGRESS_COLOR"
         private const val KEY_PROGRESS_WIDTH = "KEY_PROGRESS_WIDTH"
         private const val KEY_PROGRESS_ROUND_CAP = "KEY_PROGRESS_ROUND_CAP"
@@ -58,11 +58,11 @@ class CircularProgressView : View {
     private var centerX: Float = 0f
     private var centerY: Float = 0f
 
-    private var total: Int = 100
+    private var totalValue: Int = 100
     private var totalColor: Int = 0
     private var totalWidth: Float = 16f
 
-    private var progress: Int = 0
+    private var progressValue: Int = 0
     private var progressColor: Int = 0
     private var progressWidth: Float = 16f
     private var progressRoundCap: Boolean = false
@@ -90,11 +90,11 @@ class CircularProgressView : View {
         if (attrs != null) {
             val typedArray = context.obtainStyledAttributes(attrs, R.styleable.CircularProgressView)
 
-            total = typedArray.getInt(R.styleable.CircularProgressView_total, 100)
+            totalValue = typedArray.getInt(R.styleable.CircularProgressView_totalValue, 100)
             totalColor = typedArray.getColor(R.styleable.CircularProgressView_totalColor, 0)
             totalWidth = typedArray.getDimensionPixelSize(R.styleable.CircularProgressView_totalWidth, 16).toFloat()
 
-            progress = typedArray.getInt(R.styleable.CircularProgressView_progress, 0)
+            progressValue = typedArray.getInt(R.styleable.CircularProgressView_progressValue, 0)
             progressColor = typedArray.getColor(R.styleable.CircularProgressView_progressColor, 0)
             progressWidth = typedArray.getDimensionPixelSize(R.styleable.CircularProgressView_progressWidth, 16).toFloat()
             progressRoundCap = typedArray.getBoolean(R.styleable.CircularProgressView_progressRoundCap, false)
@@ -119,7 +119,7 @@ class CircularProgressView : View {
         }
 
         // Set the valid progress value
-        progress = getValidProgressValue(progress)
+        progressValue = getValidProgressValue(progressValue)
 
         setupPaint()
     }
@@ -180,8 +180,8 @@ class CircularProgressView : View {
         // Draw the progress text if it is enabled
         if (progressTextEnabled) {
             val progressText: String = when (progressTextType) {
-                PROGRESS_TEXT_TYPE_PROGRESS -> progress.toString()
-                PROGRESS_TEXT_TYPE_PERCENT -> percentFormat.format(progress.toFloat() / total.toFloat())
+                PROGRESS_TEXT_TYPE_PROGRESS -> progressValue.toString()
+                PROGRESS_TEXT_TYPE_PERCENT -> percentFormat.format(progressValue.toFloat() / totalValue.toFloat())
                 else -> ""
             }
 
@@ -193,8 +193,8 @@ class CircularProgressView : View {
         canvas.drawOval(circleBounds, paintTotal)
 
         // Current progress is calculated in degrees from total and progress values
-        if (total != 0 && progress != 0 && progress <= total) {
-            val progressSweepAngle = if (total == progress) 360f else ((360f / total) * progress)
+        if (totalValue != 0 && progressValue != 0 && progressValue <= totalValue) {
+            val progressSweepAngle = if (totalValue == progressValue) 360f else ((360f / totalValue) * progressValue)
             canvas.drawArc(circleBounds, startAngle, progressSweepAngle, false, paintProgress)
         }
     }
@@ -205,7 +205,7 @@ class CircularProgressView : View {
     private fun getValidProgressValue(input: Int): Int {
         return when {
             input < 0 -> 0
-            input > total -> total
+            input > totalValue -> totalValue
             else -> input
         }
     }
@@ -214,16 +214,16 @@ class CircularProgressView : View {
      * Set the value of total. By default it is 100.
      * */
     fun setTotal(total: Int) {
-        this.total = total
+        this.totalValue = total
 
         // In case if total is less than the progress, then set the progress equal to the total.
-        if (total < progress) {
-            progress = total
+        if (total < progressValue) {
+            progressValue = total
         }
         invalidate()
     }
 
-    fun getTotal(): Int = total
+    fun getTotal(): Int = totalValue
 
     fun setTotalColor(color: Int) {
         this.totalColor = color
@@ -255,23 +255,23 @@ class CircularProgressView : View {
             // Cancel any on-going animation
             progressAnimator?.cancel()
 
-            val animator = ValueAnimator.ofInt(this.progress, validProgress)
+            val animator = ValueAnimator.ofInt(this.progressValue, validProgress)
             animator.interpolator = progressInterpolator
             animator.duration = animateDuration
             animator.addUpdateListener {
                 // To make sure progress is valid in case of interpolator like "anticipate overshoot"
-                this.progress = getValidProgressValue(it.animatedValue as Int)
+                this.progressValue = getValidProgressValue(it.animatedValue as Int)
                 invalidate()
             }
             animator.start()
             progressAnimator = animator
         } else {
-            this.progress = validProgress
+            this.progressValue = validProgress
             invalidate()
         }
     }
 
-    fun getProgress(): Int = progress
+    fun getProgress(): Int = progressValue
 
     fun setProgressColor(color: Int) {
         this.progressColor = color
@@ -399,12 +399,12 @@ class CircularProgressView : View {
         bundle.putParcelable(KEY_STATE, super.onSaveInstanceState())
 
         // Keys for total
-        bundle.putInt(KEY_TOTAL, total)
+        bundle.putInt(KEY_TOTAL_VALUE, totalValue)
         bundle.putInt(KEY_TOTAL_COLOR, totalColor)
         bundle.putFloat(KEY_TOTAL_WIDTH, totalWidth)
 
         // Keys for progress
-        bundle.putInt(KEY_PROGRESS, progress)
+        bundle.putInt(KEY_PROGRESS_VALUE, progressValue)
         bundle.putInt(KEY_PROGRESS_COLOR, progressColor)
         bundle.putFloat(KEY_PROGRESS_WIDTH, progressWidth)
         bundle.putBoolean(KEY_PROGRESS_ROUND_CAP, progressRoundCap)
@@ -428,11 +428,11 @@ class CircularProgressView : View {
     override fun onRestoreInstanceState(state: Parcelable?) {
         if (state is Bundle) {
             // Restore the keys of the view that we saved in the onSaveInstanceState
-            total = state.getInt(KEY_TOTAL)
+            totalValue = state.getInt(KEY_TOTAL_VALUE)
             totalColor = state.getInt(KEY_TOTAL_COLOR)
             totalWidth = state.getFloat(KEY_TOTAL_WIDTH)
 
-            progress = state.getInt(KEY_PROGRESS)
+            progressValue = state.getInt(KEY_PROGRESS_VALUE)
             progressColor = state.getInt(KEY_PROGRESS_COLOR)
             progressWidth = state.getFloat(KEY_PROGRESS_WIDTH)
             progressRoundCap = state.getBoolean(KEY_PROGRESS_ROUND_CAP)

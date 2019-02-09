@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="CircularProgressView">
-        <attr name="total" format="integer" />
+        <attr name="totalValue" format="integer" />
         <attr name="totalColor" format="color" />
         <attr name="totalWidth" format="dimension" />
 
-        <attr name="progress" format="integer" />
+        <attr name="progressValue" format="integer" />
         <attr name="progressColor" format="color" />
         <attr name="progressWidth" format="dimension" />
         <attr name="progressRoundCap" format="boolean" />
