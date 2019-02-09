@@ -13,10 +13,10 @@ A customisable circular progress view for android.
 ## Attributes:
 | Attribute | Type | Description |
 | --- | --- | --- |
-| app:total | Integer | Total progress. By default it is 100. |
+| app:totalValue | Integer | Total progress. By default it is 100. |
 | app:totalColor | Color | Total progress color |
 | app:totalWidth | Dimension | Width of total progress |
-| app:progress | Integer | Current progress. It should be less than or equal to "total". It will be set to "total" if it is set to more than "total" |
+| app:progressValue | Integer | Current progress. It should be less than or equal to "total". It will be set to "total" if it is set to more than "total" |
 | app:progressColor | Color | Current progress color |
 | app:progressWidth | Dimension | Width of current progress |
 | app:progressRoundCap | Boolean | Enable or disable rounded cap of current progress. Disabled by default. |
@@ -39,7 +39,7 @@ A customisable circular progress view for android.
         app:animate="true"
         app:animateDuration="600"
         app:fillColor="@color/colorPrimary"
-        app:progress="10"
+        app:progressValue="10"
         app:progressColor="#FFF"
         app:progressInterpolator="@android:anim/accelerate_decelerate_interpolator"
         app:progressRoundCap="true"
@@ -49,7 +49,7 @@ A customisable circular progress view for android.
         app:progressTextType="progress"
         app:progressWidth="12dp"
         app:startAngle="270"
-        app:total="100"
+        app:totalValue="100"
         app:totalColor="@color/colorPrimaryDark"
         app:totalWidth="20dp" />
 ```
@@ -68,7 +68,7 @@ allprojects {
 Step 2. Add the dependency
 ```groovy
 dependencies {
-  implementation 'com.github.VaibhavLakhera:Circular-Progress-View:0.1.1'
+  implementation "com.github.VaibhavLakhera:Circular-Progress-View:$latestVersion"
 }
 ```
 
